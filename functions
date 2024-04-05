@@ -425,6 +425,7 @@ function build_kernel_deb_package() {
 	# shellcheck disable=SC2086
 	make ${kernel_args} bindeb-pkg \
 		KDEB_PKGVERSION="${build_id}" \
+		KDEB_COMPRESS="xz" \
 		RK_KERNEL_DTS="${DEVICE_DTB_FILE}" \
 		LOCALVERSION="-${build_device_name}"
 
