@@ -369,14 +369,26 @@ function build_config() {
 	fi
 
 	local cfg_fragment
+	local dckr_fragment
 	cfg_fragment="${KERNEL_DIR}/arch/${arch}/configs/${DEVICE_CONFIG_FRAGMENT}"
+	dckr_fragment="${KERNEL_DIR}/arch/${arch}/configs/${DEVICE_CONFIG_DOCKER}"
 
-	if [[ ! -f "${cfg_fragment}" ]]; then
-		print "----------------------------------------------------------------"
-		print "${DEVICE_CONFIG_FRAGMENT} File not found!"
-		print "----------------------------------------------------------------"
+	if [[ -f "${cfg_fragment}" ]]; then
+        cat "${cfg_fragment}" >> "${OUT_DIR}/.config"
+        print "cat ${cfg_fragment} >> ${OUT_DIR}/.config"
 	else
-		cat "${cfg_fragment}" >>"${OUT_DIR}"/.config
+		print "----------------------------------------------------------------"
+		print "Missing config fragment: ${DEVICE_CONFIG_FRAGMENT}"
+		print "----------------------------------------------------------------"
+	fi
+
+	if [[ -f "${dckr_fragment}" ]]; then
+		cat "${dckr_fragment}" >> "${OUT_DIR}/.config"
+		print "cat ${dckr_fragment} >> ${OUT_DIR}/.config"
+	else
+		print "----------------------------------------------------------------"
+		print "Missing Docker fragment: ${DEVICE_CONFIG_DOCKER}"
+		print "----------------------------------------------------------------"
 	fi
 
 	if is_enabled "${PERF_BUILD}"; then
